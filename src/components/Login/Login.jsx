@@ -1,17 +1,17 @@
-import * as React from 'react';
-import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
-import Sheet from '@mui/joy/Sheet';
-import Typography from '@mui/joy/Typography';
-import FormControl from '@mui/joy/FormControl';
-import FormLabel from '@mui/joy/FormLabel';
-import Input from '@mui/joy/Input';
-import Button from '@mui/joy/Button';
-import Link from '@mui/joy/Link';
-
+import * as React from "react";
+import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
+import Sheet from "@mui/joy/Sheet";
+import Typography from "@mui/joy/Typography";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
+import Input from "@mui/joy/Input";
+import Button from "@mui/joy/Button";
+import Link from "@mui/joy/Link";
+import axios from "axios";
 function ModeToggle() {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
-
+  
   // necessary for server-side rendering
   // because mode is undefined on the server
   React.useEffect(() => {
@@ -25,31 +25,55 @@ function ModeToggle() {
     <Button
       variant="outlined"
       onClick={() => {
-        setMode(mode === 'light' ? 'dark' : 'light');
+        setMode(mode === "light" ? "dark" : "light");
       }}
     >
-      {mode === 'light' ? 'Turn dark' : 'Turn light'}
+      {mode === "light" ? "Turn dark" : "Turn light"}
     </Button>
   );
 }
 
-export default function Login({setPage}) {
+export default function Login({ setPage,setIs_admin }) {
+  const [email,setEmail] = React.useState("")
+  const [password,setPassword] = React.useState("")
+  const handleLogin = () => {
+
+    if(email && password){
+    axios.post("http://127.0.0.1:8000/api/v1/login", {
+        email: email,
+        password: password
+      })
+      .then((response) => {
+        const data= response.data.data
+        if(data.is_login){
+          setIs_admin(data.is_admin)
+          setPage(2)
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    }
+  };
   return (
+    <div>
+
+    
     <CssVarsProvider>
       <main>
         {/* <ModeToggle /> */}
         <Sheet
           sx={{
             width: 300,
-            mx: 'auto', // margin left & right
+            mx: "auto", // margin left & right
             my: 4, // margin top & bottom
             py: 3, // padding top & bottom
             px: 2, // padding left & right
-            display: 'flex',
-            flexDirection: 'column',
+            display: "flex",
+            flexDirection: "column",
             gap: 2,
-            borderRadius: 'sm',
-            boxShadow: 'md',
+            borderRadius: "sm",
+            boxShadow: "md",
           }}
           variant="outlined"
         >
@@ -66,6 +90,7 @@ export default function Login({setPage}) {
               name="email"
               type="email"
               placeholder="connghien@8xbet.com"
+              onChange={(e)=>setEmail(e.target.value)}
             />
           </FormControl>
           <FormControl>
@@ -75,21 +100,23 @@ export default function Login({setPage}) {
               name="password"
               type="password"
               placeholder="password"
+              onChange={(e)=>setPassword(e.target.value)}
             />
           </FormControl>
 
-          <Button sx={{ mt: 1 /* margin top */ }} onClick={()=> {
-            setPage(2)}
-            }>Log in</Button>
+          <Button sx={{ mt: 1 /* margin top */ }} onClick={handleLogin}>
+            Log in
+          </Button>
           <Typography
             endDecorator={<Link href="/sign-up">Sign up</Link>}
             fontSize="sm"
-            sx={{ alignSelf: 'center' }}
+            sx={{ alignSelf: "center" }}
           >
             Don&apos;t have an account?
           </Typography>
         </Sheet>
       </main>
     </CssVarsProvider>
+    </div>
   );
 }
