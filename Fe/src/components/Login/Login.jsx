@@ -8,7 +8,6 @@ import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 import axios from "axios";
-
 function ModeToggle() {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
@@ -57,7 +56,7 @@ export default function Login({ setPage,setIs_admin }) {
     }
   };
   return (
-    <div className="containerTable">
+    <div>
 
     
     <CssVarsProvider>
@@ -90,7 +89,6 @@ export default function Login({ setPage,setIs_admin }) {
               // html input attribute
               name="email"
               type="email"
-              id = "email"
               placeholder="connghien@8xbet.com"
               onChange={(e)=>setEmail(e.target.value)}
             />
@@ -99,7 +97,6 @@ export default function Login({ setPage,setIs_admin }) {
             <FormLabel>Password</FormLabel>
             <Input
               // html input attribute
-              id = "password"
               name="password"
               type="password"
               placeholder="password"

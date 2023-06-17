@@ -2,6 +2,14 @@ import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Grid from '@mui/material/Grid';
 import "./style.css"
+import { Button } from '@mui/material';
+
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
   { field: 'event', headerName: 'Event', width: 300 },
@@ -18,6 +26,18 @@ const rows = [
 ];
 
 export default function Noti() {
+  const [open, setOpen] = React.useState(false);
+  const [email, setEmail] = React.useState("");
+  const [event, setEvent] = React.useState("");
+  const [description,setDescription] = React.useState("");
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <div className='containerTable'>
     
@@ -25,6 +45,7 @@ export default function Noti() {
     <Grid item xs={10} margin={"auto"} >
     <h2 style={{marginTop:"5%"}}>Notification</h2>
     <div style={{ height: 400, width: '100%' }}>
+      
       <DataGrid
         rows={rows}
         columns={columns}
@@ -38,8 +59,53 @@ export default function Noti() {
         sx={{margin:"auto"}}
       />
     </div>
+    <Button onClick={handleClickOpen} color='primary'>Create Event</Button>
     </Grid>
     </Grid>
+    <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Create Event</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+          </DialogContentText>
+          {/* <img style={{width:"50%"}} src={AvtStaff} alt="" srcset="" /> */}
+          <TextField
+            autoFocus
+            margin="dense"
+            id="email"
+            label="Email Address"
+            value={email}
+            onChange={(e)=>setEmail(e.target.email)}
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="event"
+            label="event"
+            onChange={(e)=>setEvent(e.target.value)}
+            value={event}
+            fullWidth
+            variant="standard"
+          />
+           <TextField
+            autoFocus
+            margin="dense"
+            id="description"
+            label="Description"
+            value={description}
+            fullWidth
+            onChange={(e)=>setDescription(e.target.value)}
+            variant="standard"
+          />
+        
+          
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Create/Send event</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
